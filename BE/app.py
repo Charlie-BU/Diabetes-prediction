@@ -1,21 +1,15 @@
-import json
-import os
-import pathlib
 from robyn import Robyn, ALLOW_CORS, jsonify
-from robyn.templating import JinjaTemplate
 
+from algorithm import start_predict
 from models import session, Patient
 
 app = Robyn(__file__)
-current_file_path = pathlib.Path(__file__).parent.resolve()
-JINJA_TEMPLATE = JinjaTemplate(os.path.join(current_file_path, "templates"))
-# 生产环境需要注释：使用nginx解决跨域
 ALLOW_CORS(app, origins=["*"])
 
 
 @app.get("/")
 async def index():
-    return JINJA_TEMPLATE.render_template("index.html")
+    return "HELLO FROM DIABETES PREDICTION BACKEND"
 
 
 @app.get("/api/getPatientData")
@@ -23,7 +17,6 @@ async def getPatientData(request):
     params = request.query_params.to_dict()
     try:
         query = session.query(Patient)
-        total = query.count()
         page = params.get("page")[0]
         pageSize = params.get("pageSize")[0]
 
@@ -76,6 +69,8 @@ async def getPatientData(request):
             query = query.filter(Patient.blood_glucose_level <= blood_glucose_levelMax)
         if diabetes:
             query = query.filter(Patient.diabetes == diabetes)
+
+        total = query.count()
         patients = query.offset((int(page) - 1) * int(pageSize)) \
             .limit(pageSize) \
             .all()
@@ -95,9 +90,15 @@ async def getPatientData(request):
 
 @app.post("/api/predict")
 async def predict(request):
+    params = request.query_params.to_dict()
+    disease = params["disease"][0]
     data = request.json()
-
-
+    result = start_predict(disease, data)
+    return jsonify({
+        "status": 200,
+        "message": "Success",
+        "result": result
+    })
 
 
 # def data_transfer2():

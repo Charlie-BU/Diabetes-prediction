@@ -3,5 +3,5 @@
   <component name="Black">
     <option name="sdkName" value="robyn" />
   </component>
-  <component name="ProjectRootManager" version="2" project-jdk-name="robyn" project-jdk-type="Python SDK" />
+  <component name="ProjectRootManager" version="2" project-jdk-name="data-mining" project-jdk-type="Python SDK" />
 </project>

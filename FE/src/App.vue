@@ -3,7 +3,7 @@
         <!-- 左侧菜单栏 -->
         <div class="sidebar">
             <div class="logo-container">
-                <h2 class="logo">Diabetes AI</h2>
+                <h2 class="logo">DISEASE PREDICTION</h2>
             </div>
             <div class="menu">
                 <div class="menu-item" :class="{ active: activeComponent === 'table' }"
@@ -13,12 +13,26 @@
                     </el-icon>
                     <span>Data Browser</span>
                 </div>
-                <div class="menu-item" :class="{ active: activeComponent === 'model' }"
-                    @click="activeComponent = 'model'">
+                <div class="menu-item" :class="{ active: activeComponent === 'Diabetes' }"
+                    @click="activeComponent = 'Diabetes'">
                     <el-icon>
                         <Monitor />
                     </el-icon>
                     <span>Diabetes Prediction</span>
+                </div>
+                <div class="menu-item" :class="{ active: activeComponent === 'Heart Disease' }"
+                    @click="activeComponent = 'Heart Disease'">
+                    <el-icon>
+                        <Promotion />
+                    </el-icon>
+                    <span>Heart Disease Prediction</span>
+                </div>
+                <div class="menu-item" :class="{ active: activeComponent === 'Hypertension' }"
+                    @click="activeComponent = 'Hypertension'">
+                    <el-icon>
+                        <TrendCharts />
+                    </el-icon>
+                    <span>Hypertension Prediction</span>
                 </div>
             </div>
         </div>
@@ -26,11 +40,13 @@
         <!-- 主内容区域 -->
         <div class="main-content">
             <div class="header">
-                <h1>{{ activeComponent === 'table' ? 'Data Browser' : 'Diabetes Prediction' }}</h1>
+                <h1>{{ activeComponent === 'table' ? 'Data Browser' : `${activeComponent} Prediction` }}</h1>
             </div>
             <div class="content-area">
                 <Table v-if="activeComponent === 'table'" />
-                <Model v-else-if="activeComponent === 'model'" />
+                <Diabetes v-else-if="activeComponent === 'Diabetes'" />
+                <HeartDisease v-else-if="activeComponent === 'Heart Disease'" />
+                <Hypertension v-else-if="activeComponent === 'Hypertension'" />
             </div>
         </div>
     </div>
@@ -39,8 +55,10 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import Table from './components/Table.vue'
-import Model from './components/Model.vue'
-import { DataLine, Monitor } from '@element-plus/icons-vue'
+import Diabetes from './components/Diabetes.vue'
+import Hypertension from './components/Hypertension.vue'
+import HeartDisease from './components/HeartDisease.vue'
+import { DataLine, Monitor, Promotion, TrendCharts } from '@element-plus/icons-vue'
 
 const activeComponent = ref('table')
 </script>
@@ -68,9 +86,7 @@ body {
     color: var(--text-color);
     font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
 }
-</style>
 
-<style scoped>
 .app-container {
     display: flex;
     min-height: 100vh;
