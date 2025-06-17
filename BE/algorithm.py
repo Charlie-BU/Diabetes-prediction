@@ -2,12 +2,14 @@ import pandas as pd
 import pickle
 import warnings
 
+from models import session, Patient
+
 warnings.filterwarnings('ignore')
 
 DIABETES_MODEL = "./pkl/JJC_diabetes_prediction_xgboost_model.pkl"
 HEART_DISEASE_MODEL = "./pkl/JJC_heartdisease_prediction_xgboost_model.pkl"
 HYPERTENSION_MODEL = "./pkl/JJC_hypertension_prediction_xgboost_model.pkl"
-OPTIMAL_THRESHOLD = 0.44398162
+OPTIMAL_THRESHOLD = 1 - 0.67785597
 
 
 def preprocess_data(df):
@@ -63,15 +65,42 @@ def start_predict(disease_type, sample_data):
 
 
 if __name__ == '__main__':
-    test_data = {
-        'HbA1c_level': '2.21',
-        'age': '12',
-        'blood_glucose_level': '23',
-        'bmi': '23.2',
-        'gender': 'Female',
-        'heart_disease': '0',
-        'hypertension': '1',
-        'smoking_history': 'current'
-    }
-    res = start_predict("diabetes", test_data)
-    print(res)
+    # test_data = {
+    #     'HbA1c_level': '2.21',
+    #     'age': '12',
+    #     'blood_glucose_level': '23',
+    #     'bmi': '23.2',
+    #     'gender': 'Female',
+    #     'heart_disease': '0',
+    #     'hypertension': '1',
+    #     'smoking_history': 'current'
+    # }
+    patients = session.query(Patient).all()
+    patients = [patient.to_json() for patient in patients]
+    patients_for_model = [{
+        'HbA1c_level': patient['HbA1c_level'],
+        'age': patient['age'],
+        'blood_glucose_level': patient['blood_glucose_level'],
+        'bmi': patient['bmi'],
+        'gender': patient['gender'],
+        'heart_disease': patient['heart_disease'],
+        'hypertension': patient['hypertension'],
+        'smoking_history': patient['smoking_history'],
+        "diabetes": patient['diabetes']
+    } for patient in patients]
+    count_correct = 0
+    count_mistake = 0
+    total = 0
+    for patient in patients_for_model:
+        patient_for_model = patient.copy()
+        del patient_for_model['diabetes']
+        res = start_predict("diabetes", patient_for_model)
+        if patient['diabetes'] and res['prediction']:
+            count_correct += 1
+        elif not patient['diabetes'] and not res['prediction']:
+            count_correct += 1
+        else:
+            count_mistake += 1
+        total += 1
+        print("Currently: No.", total)
+    print("Accuracy: ", count_correct / (count_correct + count_mistake))

@@ -1,9 +1,9 @@
 import { ofetch } from "ofetch";
 
-// const LOCAL = "http://localhost:6060";
-const PRODUCTION = "http://119.3.226.59:6060";
+const LOCAL = "http://localhost:6060";
+// const PRODUCTION = "http://119.3.226.59:6060";
 
-const BASE_URL = PRODUCTION;
+const BASE_URL = LOCAL;
 
 export const get = async (url: string, params?: any) => {
     const res = await ofetch(BASE_URL + url, {

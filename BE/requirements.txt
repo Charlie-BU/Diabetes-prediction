@@ -4,3 +4,4 @@ alembic
 pandas
 numpy
 matplotlib
+xgboost
