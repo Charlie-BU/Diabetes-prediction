@@ -7,8 +7,9 @@ Contains the code for the hyper parameter tuning (commented out) and the NN mode
 train_ensemble.py
 Loads the diabetes XGBoost model and NN model .pkl files (have to be in the same directory) and trains a perceptron to combine their predictions.
 
-JJC_Final_Project.ipynb  
+JJC_Final_Project.ipynb (WE USED THIS IN THE END)   
 Contains the code for exploratory data analysis and XGBoost model for Diabetes with hyperparameter tuning optimised for AUC but without managing class imbalance.  
+  
 JJC_Final_Project_HeartDisease.ipynb  
 Contains the code for XGBoost model for Heart Disease with hyperparameter tuning optimised for AUC but without managing class imbalance.  
 JJC_Final_Project_Hypertension.ipynb  
